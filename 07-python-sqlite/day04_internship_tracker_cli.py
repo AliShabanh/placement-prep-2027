@@ -1,6 +1,21 @@
+# Day 4: Command-line internship tracker
+# This app connects to a SQLite database and allows the user to:
+# - view internship applications
+# - add new applications
+# - search by status
+# - search by company
+# - update application status
+# Note: This application was developed with AI assistance as a learning project.
+# The goal is to better understand how Python connects to and interacts with
+# SQLite while practicing the implementation of real-world database operations.
+# Any code in the "08-independent-practice" folder represents my own independent
+# work and practice without AI-generated implementations.
+
 import sqlite3
 
 DATABASE_NAME = "placement.db"
+
+VALID_STATUSES = ["Interested", "Applied", "Interview", "Rejected", "Offer"]
 
 
 def connect_to_database():
@@ -19,6 +34,62 @@ def get_all_applications():
     connection.close()
     return applications
 
+def get_applications_by_status(status):
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM applications
+        WHERE LOWER(status) = LOWER(?)
+        ORDER BY deadline ASC;
+        """,
+        (status,)
+    )
+
+    applications = cursor.fetchall()
+    connection.close()
+
+    return applications
+
+def get_applications_by_company(company):
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM applications
+        WHERE LOWER(company) LIKE LOWER(?)
+        ORDER BY deadline ASC;
+        """,
+        (f"%{company}%",)
+    )
+
+    applications = cursor.fetchall()
+    connection.close()
+
+    return applications
+
+def update_application_status(application_id, new_status):
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE applications
+        SET status = ?
+        WHERE id = ?;
+        """,
+        (new_status, application_id)
+    )
+
+    connection.commit()
+    rows_updated = cursor.rowcount
+    connection.close()
+
+    return rows_updated
 
 def display_applications(applications):
     if not applications:
@@ -120,6 +191,63 @@ def add_application_from_input():
         notes=notes
     )
 
+def search_by_status_from_input():
+    print("\nSearch by Status")
+    print("-" * 30)
+
+    status = input("Enter status (Interested/Applied/Interview/Rejected/Offer): ").strip()
+
+    if not status:
+        print("Status is required.")
+        return
+
+    applications = get_applications_by_status(status)
+    display_applications(applications)
+
+def search_by_company_from_input():
+    print("\nSearch by Company")
+    print("-" * 30)
+
+    company = input("Enter company name or part of company name: ").strip()
+
+    if not company:
+        print("Company search text is required.")
+        return
+
+    applications = get_applications_by_company(company)
+    display_applications(applications)
+
+def update_status_from_input():
+    print("\nUpdate Application Status")
+    print("-" * 30)
+
+    application_id_text = input("Enter application ID: ").strip()
+
+    if not application_id_text.isdigit():
+        print("Application ID must be a number.")
+        return
+
+    application_id = int(application_id_text)
+
+    print("Valid statuses:")
+    for status in VALID_STATUSES:
+        print(f"- {status}")
+
+    new_status = input("Enter new status: ").strip()
+
+    if new_status not in VALID_STATUSES:
+        print("Invalid status. Please use one of the valid statuses.")
+        return
+
+    rows_updated = update_application_status(application_id, new_status)
+
+    if rows_updated == 0:
+        print(f"No application found with ID {application_id}.")
+    else:
+        print(f"Application {application_id} status updated to {new_status}.")
+
+
+
 
 def show_menu():
     print("\nInternship Tracker")
@@ -143,6 +271,15 @@ def main():
 
         elif choice == "2":
             add_application_from_input()
+
+        elif choice == "3":
+            search_by_status_from_input()
+
+        elif choice == "4":
+            search_by_company_from_input()
+
+        elif choice == "5":
+            update_status_from_input()
 
         elif choice == "6":
             print("Goodbye.")

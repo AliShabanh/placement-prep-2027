@@ -1,10 +1,7 @@
-# Day 4: Command-line internship tracker
-# This app connects to a SQLite database and allows the user to:
-# - view internship applications
-# - add new applications
-# - search by status
-# - search by company
-# - update application status
+# Internship Tracker CLI
+# A command-line Python application for tracking internship applications.
+# The app uses SQLite for local data storage and supports viewing, adding,
+# searching, and updating application records.
 # Note: This application was developed with AI assistance as a learning project.
 # The goal is to better understand how Python connects to and interacts with
 # SQLite while practicing the implementation of real-world database operations.

@@ -29,11 +29,18 @@ VALID_WORK_MODES = [
     "On-site"
 ]
 
+# -----------------------------
+# Database connection
+# -----------------------------
 
 def connect_to_database():
     connection = sqlite3.connect(DATABASE_NAME)
     connection.row_factory = sqlite3.Row
     return connection
+
+# -----------------------------
+# Validation helpers
+# -----------------------------
 
 def is_valid_status(status):
     return status in VALID_STATUSES
@@ -66,6 +73,9 @@ def get_valid_application_id():
 
     return int(application_id_text)
 
+# -----------------------------
+# Database operations
+# -----------------------------
 
 def get_all_applications():
     connection = connect_to_database()
@@ -192,6 +202,10 @@ def add_application(company, role_title, location, work_mode, status, deadline, 
 
     print(f"Application added: {company} - {role_title}")
 
+# -----------------------------
+# User interface functions
+# -----------------------------
+
 def add_application_from_input():
     print("\nAdd New Application")
     print("-" * 30)
@@ -298,6 +312,9 @@ def update_status_from_input():
 
 
 
+# -----------------------------
+# Main program loop
+# -----------------------------
 
 def show_menu():
     print("\nInternship Tracker")

@@ -202,6 +202,24 @@ def add_application(company, role_title, location, work_mode, status, deadline, 
 
     print(f"Application added: {company} - {role_title}")
 
+def get_application_by_id(application_id):
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM applications
+        WHERE id = ?;
+        """,
+        (application_id,)
+    )
+
+    application = cursor.fetchone()
+    connection.close()
+
+    return application
+
 # -----------------------------
 # User interface functions
 # -----------------------------
@@ -310,21 +328,38 @@ def update_status_from_input():
     else:
         print(f"Application {application_id} status updated to {new_status}.")
 
+def view_application_by_id_from_input():
+    print("\nView Application by ID")
+    print("-" * 30)
 
+    application_id = get_valid_application_id()
+
+    if application_id is None:
+        return
+
+    application = get_application_by_id(application_id)
+
+    if application is None:
+        print(f"No application found with ID {application_id}.")
+        return
+
+    display_applications([application])
 
 # -----------------------------
 # Main program loop
 # -----------------------------
 
 def show_menu():
-    print("\nInternship Tracker")
-    print("=" * 30)
-    print("1. View all applications")
-    print("2. Add application")
-    print("3. Search by status")
-    print("4. Search by company")
-    print("5. Update application status")
-    print("6. Exit")
+    def show_menu():
+        print("\nInternship Tracker")
+        print("=" * 30)
+        print("1. View all applications")
+        print("2. View application by ID")
+        print("3. Add application")
+        print("4. Search by status")
+        print("5. Search by company")
+        print("6. Update application status")
+        print("7. Exit")
 
 
 def main():
@@ -337,23 +372,26 @@ def main():
             display_applications(applications)
 
         elif choice == "2":
-            add_application_from_input()
+            view_application_by_id_from_input()
 
         elif choice == "3":
-            search_by_status_from_input()
+            add_application_from_input()
 
         elif choice == "4":
-            search_by_company_from_input()
+            search_by_status_from_input()
 
         elif choice == "5":
-            update_status_from_input()
+            search_by_company_from_input()
 
         elif choice == "6":
+            update_status_from_input()
+
+        elif choice == "7":
             print("Goodbye.")
             break
 
         else:
-            print("Invalid choice. Please choose a number from 1 to 6.")
+            print("Invalid choice. Please choose a number from 1 to 7.")
 
 
 if __name__ == "__main__":

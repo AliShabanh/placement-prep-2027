@@ -54,6 +54,18 @@ def display_valid_work_modes():
     for work_mode in VALID_WORK_MODES:
         print(f"- {work_mode}")
 
+def is_required_text(value):
+    return bool(value.strip())
+
+def get_valid_application_id():
+    application_id_text = input("Enter application ID: ").strip()
+
+    if not application_id_text.isdigit():
+        print("Application ID must be a number.")
+        return None
+
+    return int(application_id_text)
+
 
 def get_all_applications():
     connection = connect_to_database()
@@ -187,7 +199,7 @@ def add_application_from_input():
     company = input("Company: ").strip()
     role_title = input("Role title: ").strip()
 
-    if not company or not role_title:
+    if not is_required_text(company) or not is_required_text(role_title):
         print("Company and role title are required.")
         return
 
@@ -218,7 +230,7 @@ def add_application_from_input():
     if applied_date == "":
         applied_date = None
 
-    if not location or not work_mode or not status:
+    if not is_required_text(location) or not is_required_text(work_mode) or not is_required_text(status):
         print("Location, work mode, and status are required.")
         return
 
@@ -264,14 +276,11 @@ def update_status_from_input():
     print("\nUpdate Application Status")
     print("-" * 30)
 
-    application_id_text = input("Enter application ID: ").strip()
+    application_id = get_valid_application_id()
 
-    if not application_id_text.isdigit():
-        print("Application ID must be a number.")
+    if application_id is None:
         return
-
-    application_id = int(application_id_text)
-
+    
     display_valid_statuses()
 
     new_status = input("Enter new status: ").strip()

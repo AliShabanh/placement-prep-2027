@@ -68,3 +68,28 @@ GET /applications/search/by-status     Search applications by status
 ## Next Step
 
 Connect FastAPI to the existing SQLite internship tracker database.
+
+## Day 9: SQLite Integration
+
+In Day 9, I connected the FastAPI app to the existing SQLite database.
+
+The API now reads real internship application data from:
+
+```text
+placement.db
+
+
+## SQLite Endpoints
+GET /applications
+GET /applications/{application_id}
+GET /applications/search/by-status?status=Interested
+GET /applications/search/by-company?company=Google
+
+## What I Practised
+Connecting FastAPI to SQLite
+Reusing database logic from the CLI project
+Converting sqlite3.Row objects into dictionaries
+Returning real database records as JSON
+Using fetchone() for one record by ID
+Using fetchall() for search/list endpoints
+Raising HTTPException with 404 when a record is not found

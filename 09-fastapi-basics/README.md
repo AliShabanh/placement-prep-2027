@@ -93,3 +93,59 @@ Returning real database records as JSON
 Using fetchone() for one record by ID
 Using fetchall() for search/list endpoints
 Raising HTTPException with 404 when a record is not found
+
+## Day 10: POST Endpoint and Pydantic Validation
+
+In Day 10, I added the first write endpoint to the API.
+
+The API can now create new internship applications using:
+
+```text
+POST /applications
+
+What the POST Endpoint Does
+Client sends JSON body
+FastAPI validates the data using Pydantic
+The API checks for duplicates
+The application is inserted into SQLite
+The new application is returned as JSON
+
+Validation Added
+The request body is validated using a Pydantic model.
+
+Required fields:
+
+    company
+    role_title
+    location
+    work_mode
+    status
+
+Allowed work modes:
+
+    Hybrid
+    Remote
+    On-site
+
+Allowed statuses:
+
+    Interested
+    Applied
+    Interview
+    Rejected
+    Offer
+
+Error Handling
+201 Created -> New application created successfully
+409 Conflict -> Duplicate application
+422 Validation Error -> Invalid request body
+
+What I Practised
+Creating a POST endpoint
+Using Pydantic BaseModel
+Validating request body data
+Using Literal for allowed values
+Inserting new rows into SQLite
+Using cursor.lastrowid
+Returning the newly created record
+Handling duplicate data with HTTPException

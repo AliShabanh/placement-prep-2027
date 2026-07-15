@@ -149,3 +149,35 @@ Inserting new rows into SQLite
 Using cursor.lastrowid
 Returning the newly created record
 Handling duplicate data with HTTPException
+
+## Day 11: PATCH Endpoint for Status Updates
+
+In Day 11, I added an update endpoint to change the status of an internship application.
+
+The API can now update an application using:
+
+```text
+PATCH /applications/{application_id}/status
+
+
+## Example request body:
+
+{
+  "status": "Interview"
+}
+
+## What the PATCH Endpoint Does
+Client sends the application ID in the URL
+Client sends the new status in the request body
+Pydantic validates the status
+SQLite updates the application row
+The API checks cursor.rowcount
+The updated application is returned as JSON
+
+## What I Practised
+Creating a PATCH endpoint
+Updating one field instead of the whole record
+Using a Pydantic model for update validation
+Running SQL UPDATE from FastAPI
+Using cursor.rowcount to detect missing records
+Returning the updated row after the update

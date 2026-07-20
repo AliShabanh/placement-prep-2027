@@ -181,3 +181,22 @@ Using a Pydantic model for update validation
 Running SQL UPDATE from FastAPI
 Using cursor.rowcount to detect missing records
 Returning the updated row after the update
+
+## Day 12: Refactor into Multiple Files
+
+In Day 12, I refactored the FastAPI project from one large file into a cleaner multi-file structure.
+
+### New Structure
+
+```text
+app/
+├── __init__.py
+├── main.py
+├── database.py
+├── models.py
+└── crud.py
+
+main.py      API routes and HTTP error handling
+database.py  SQLite connection and row conversion helpers
+models.py    Pydantic request models
+crud.py      SQL database functions

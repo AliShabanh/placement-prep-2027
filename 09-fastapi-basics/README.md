@@ -200,3 +200,26 @@ main.py      API routes and HTTP error handling
 database.py  SQLite connection and row conversion helpers
 models.py    Pydantic request models
 crud.py      SQL database functions
+
+
+## Day 13: DELETE Endpoint
+
+In Day 13, I added a DELETE endpoint to remove internship applications from the SQLite database.
+
+### Endpoint
+
+```text
+DELETE /applications/{application_id}
+
+## What does Delete Endpoint Does
+
+Client sends the application ID in the URL
+FastAPI receives the DELETE request
+SQLite deletes the matching row
+The API checks cursor.rowcount
+If the ID does not exist, the API returns 404
+If the delete succeeds, the API returns 204 No Content
+
+## Error Handling
+204 No Content    Application deleted successfully
+404 Not Found     Application ID does not exist

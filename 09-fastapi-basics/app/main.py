@@ -8,6 +8,7 @@ from app.crud import (
     get_applications_by_company_from_db,
     get_applications_by_status_from_db,
     update_application_status_in_db,
+    delete_application_from_db
 )
 from app.database import DATABASE_NAME
 from app.models import ApplicationCreate, ApplicationStatusUpdate
@@ -92,3 +93,15 @@ def get_application(application_id: int):
         )
 
     return application
+
+@app.delete("/applications/{application_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_application(application_id: int):
+    rows_deleted = delete_application_from_db(application_id)
+
+    if rows_deleted == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Application not found"
+        )
+
+    return None

@@ -149,3 +149,21 @@ def update_application_status_in_db(application_id, new_status):
     connection.close()
 
     return rows_updated
+
+def delete_application_from_db(application_id):
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        DELETE FROM applications
+        WHERE id = ?;
+        """,
+        (application_id,)
+    )
+
+    connection.commit()
+    rows_deleted = cursor.rowcount
+    connection.close()
+
+    return rows_deleted
